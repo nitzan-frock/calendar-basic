@@ -1,0 +1,6 @@
+.Wrapper {
+    display: flex;
+    justify-content: center;
+    border: 1px solid red;
+    align-self: center;
+}
