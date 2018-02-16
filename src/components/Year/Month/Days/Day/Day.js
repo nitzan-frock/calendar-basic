@@ -3,7 +3,9 @@ import classes from './Day.css';
 
 const Day = (props) => {
     return (
-        <div className={classes.Day}>{props.day}</div>
+        <div className={classes.Day}>
+            <button>{props.day}</button>
+        </div>
     );
 };
 

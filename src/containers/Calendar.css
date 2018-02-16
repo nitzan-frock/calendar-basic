@@ -33,7 +33,7 @@
   height: 100%;
   width: 100%;
   grid-template-columns: repeat(7, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  grid-template-rows: repeat(6, 1fr);
   align-items: center;
   justify-items: center;
 }
@@ -50,4 +50,8 @@
   margin-right: 10%;
   padding-left: 5%;
   border: 1px solid blue;
+}
+
+.MonthButtons {
+  display: flex;
 }
