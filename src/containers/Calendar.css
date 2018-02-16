@@ -1,0 +1,41 @@
+.Calendar {
+  display: grid;
+  width: 800px;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: 1fr  0.5fr repeat(5, 1fr);
+  outline: 1px solid black;
+  margin: 10px 10px;
+}
+
+.MonthYear {
+  grid-row: 1/2;
+  grid-column: 1/8; 
+  display: flex;
+  border: 2px solid blue;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.DayNames {
+  grid-row: 2/3;
+  grid-column: 1/8;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border: 1px solid black;
+}
+
+.Month {
+  display: flex;
+  margin-left: 10%;
+  padding-right: 5%;
+  border: 1px solid blue;
+}
+
+.Year {
+  display: flex;
+  margin-right: 10%;
+  padding-left: 5%;
+  border: 1px solid blue;
+}
