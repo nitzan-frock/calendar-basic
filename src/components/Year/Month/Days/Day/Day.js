@@ -1,10 +1,9 @@
 import React from 'react';
+import classes from './Day.css';
 
 const Day = (props) => {
     return (
-        <div>
-            {props.number}
-        </div>
+        <div className={classes.Day}>{props.day}</div>
     );
 };
 

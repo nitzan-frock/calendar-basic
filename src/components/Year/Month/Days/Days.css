@@ -1,7 +1,5 @@
-.Days {
-    display: grid;
-    height: 100%;
-    width: 100%;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+.Day {
+    display: flex;
+    align-content: center;
 }
+

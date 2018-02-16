@@ -29,35 +29,58 @@ class Calendar extends Component {
   };
 
   getDays = () => {
-    let days = [1,2,3,4];
-    let day;
+    console.log("IN getDays");
+    let days = {
+      prev: [],
+      current: [],
+      next: []
+    };
+
     const currentDate = {...this.state.currentDate};
-    let firstCalDate;
-    const firstOfMonth =
-      moment()
-      .year(currentDate.year)
-      .month(currentDate.month)
-      .date(1);
+
+    // first of the current month
+    const firstOfMonth = moment().year(currentDate.year).month(currentDate.month).date(1);
     const firstDayOfMonth = firstOfMonth.day();
+    const current = {
+      year: currentDate.year,
+      month: "0"+(currentDate.month),
+      firstofMonth: "01",
+      day: firstDayOfMonth
+    };
+    let daysToStartOfCal = 0;
 
-    // TODO: create an object with the year, month, and day of the first day
-    // check if the day of the week is a sunday.
-    // if it is not, then subtract the number of days to sunday and add the previous
-    // month's days to the days array.
+    if (current.day !== 0){ // current Month's first day is not a sunday
+      let prevMonth = current.month - 1;
+      daysToStartOfCal = current.firstofMonth - current.day;
 
-    console.log(firstDayOfMonth);
-    if (firstOfMonth != 0){
-
+      for (let i = daysToStartOfCal; i <= 0; i++) { // get rolling dates from previous month
+        days.prev.push({
+          day: moment().year(current.year).month(prevMonth).date(i).format('D'),
+          key: "prev"+i,
+        });
+      }
+    }
+    for (let i = 1, daysLeft = daysToStartOfCal + 35; i < daysLeft; i++) {
+      if (i <= moment().daysInMonth()){
+        days.current.push({
+          day: moment().year(current.year).month(current.month).date(i).format('D'),
+          key: "current"+i
+        });
+      }
+      else {
+        days.next.push({
+          day: moment().year(current.year).month(current.month).date(i).format('D'),
+          key: "next"+i
+        });
+      }
     }
     return days;
   }
 
   render() {
-    //console.log(days);
-    let day = moment().year(this.state.currentDate.year).month(this.state.currentDate.month).date(this.state.currentDate.day);
-    //console.log(day);
-    //console.log(moment().month(this.state.currentDate.month-1).format('MMMM'));
-    console.log(moment().day());
+    let days = (
+      <Days days={this.getDays()} currentDate={this.state.currentDate} key="days"/>
+    );
     return (
       <div className={classes.Calendar}>
         <div className={classes.MonthYear}>
@@ -72,7 +95,7 @@ class Calendar extends Component {
           <DayNames names={DAY_NAMES} />
         </div>
         <div className={classes.Days}>
-          <Days days={this.getDays} />
+          {days}
         </div>
       </div>
     );
