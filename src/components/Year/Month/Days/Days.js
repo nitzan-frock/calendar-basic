@@ -3,10 +3,8 @@ import Day from '../Days/Day/Day';
 import classes from './Days.css';
 
 const Days = (props) => {
-    console.log("IN DAYS");
     let allDays = [];
     let prev = props.days.prev.map((day, index) => {
-        console.log(day.day);
         return (
             <div className={classes.Day}>
                 <Day day={day.day} key={day.key} />
@@ -29,7 +27,6 @@ const Days = (props) => {
     });
 
     allDays.push(prev, current, next);
-    console.log(allDays);
     return allDays;
 };
 

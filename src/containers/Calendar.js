@@ -39,75 +39,86 @@ class Calendar extends Component {
 
     const currentDate = {...this.state.currentDate};
 
-    // first of the current month
-    console.log(currentDate);
+    // first day of the current month
     const firstOfMonth = moment().year(currentDate.year).month(currentDate.month).date(1);
     const firstDayOfMonth = firstOfMonth.day();
     const current = {
       year: currentDate.year,
       month: "0"+(currentDate.month),
-      firstofMonth: "01",
+      firstOfMonth: "01",
       day: firstDayOfMonth
     };
-    let daysToStartOfCal = 0;
+    let daysOfPrevMonth = 0;
 
     if (current.day !== 0){ // current Month's first day is not a sunday
       let prevMonth = +current.month - 1;
-      let prevYear = current.year - 1;
-      daysToStartOfCal = current.firstofMonth - current.day;
-      console.log("   current month "+moment().month(+current.month).format('MMMM'));  
-      if (+current.month === 0) {
-        prevMonth = moment().month(prevMonth).format('MMMM');
-        console.log("   prevMonth: " + moment().month(prevMonth).format('MMMM'));
-        console.log("   prevYear: " + prevYear);
-        console.log(daysToStartOfCal);
-
-        days.prev = this.populateDays(days.prev, daysToStartOfCal, prevYear, prevMonth, "prev");
+      //console.log(current.day);
+      daysOfPrevMonth = current.day - current.firstOfMonth;
+      if (+current.month === 0) { // if current month is January
+        let prevYear = current.year - 1;
+        days.prev = this.getRollingDays(
+          days.prev, 
+          daysOfPrevMonth, 
+          prevYear, 
+          prevMonth, 
+          "prev"
+        );
       }
       else {
         console.log("prevMonth: "+prevMonth);
-        days.prev = this.populateDays(days.prev, daysToStartOfCal, current.year, prevMonth, "prev");
+        days.prev = this.getRollingDays(
+          days.prev, 
+          daysOfPrevMonth, 
+          current.year, 
+          prevMonth, 
+          "prev"
+        );
       }
     }
-    console.log("   prev month days:");
-    console.log(days);
-    for (let i = 1, daysLeft = daysToStartOfCal + 42; i < daysLeft; i++) {
-      if (i <= moment().daysInMonth()){
-        days.current.push({
-          day: moment().year(current.year).month(current.month).date(i).format('D'),
-          key: "current"+i
-        });
-      }
-      else {
-        days.next.push({
-          day: moment().year(current.year).month(current.month).date(i).format('D'),
-          key: "next"+i
-        });
-      }
-    }
+    days.current = this.getCurrentDays(current.month, days.current, "current");
+    let remainingDays = 42 - (days.current.length + days.prev.length);
+    days.next = this.getRollingDays(
+      days.next, 
+      remainingDays, 
+      current.year, 
+      +current.month+1,
+      "next"
+    );
     return days;
   }
 
-  populateDays = (days, daysToStartOfCal, year, month, key) => {
-    console.log("in populate Days");
-    console.log("   year: " + year + " month: " + month);
-    console.log("   daysToStartOfCal: " + daysToStartOfCal);  
-    if (daysToStartOfCal === 0) {
-      daysToStartOfCal = moment().month(month).daysInMonth();
-      days.push({
-        day: moment().year(year).month(month).date(daysToStartOfCal).format('D'),
-        key: key+0,
-      });
-    }
-    else {
-      for (let i = daysToStartOfCal; i < 1; i++) { // get rolling dates from previous month
+  getRollingDays = (days, daysOfRollingMonth, year, month, key) => {
+    let daysInMonth = moment().month(month).daysInMonth();
+    if (key === "prev") {
+      let rollingDays = daysInMonth - daysOfRollingMonth;
+      // get rolling dates from previous month
+      for (let i = 0; i <= daysOfRollingMonth; i++) { 
         days.push({
-          day: moment().year(year).month(month).date(i).format('D'),
+          day: rollingDays++,
           key: key+i,
         });
       }
+      return days;
     }
-    console.log(days);
+    else { // get rolling dates for next month
+      for (let i = 1; i <= daysOfRollingMonth; i++) {
+        days.push({
+          day: i,
+          key: key+i
+        });
+      }
+      return days;
+    }
+  }
+
+  getCurrentDays = (month, days, key) => {
+    let daysInMonth = moment().month(month).daysInMonth();
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push({
+        day: i,
+        key: key+i
+      });
+    }
     return days;
   }
 
@@ -123,8 +134,8 @@ class Calendar extends Component {
   }
 
   clickedPrevMonth = (currentDate) => {
-    console.log(currentDate.month);
-    if (currentDate.month === 0) {
+    console.log("   current month: "+currentDate.month);
+    if (currentDate.month === 0) { // if the current month is Jan, subtract a year and set the month to Dec.
       currentDate.year = currentDate.year-1;
       currentDate.month = 11;
       currentDate.day = null;
@@ -132,9 +143,8 @@ class Calendar extends Component {
     }
     else {
       currentDate.month = currentDate.month-1;
-      console.log(currentDate.month);
+      console.log("   prev month: "+currentDate.month);
       currentDate.day = null;
-      console.log(currentDate);
       return currentDate;
     }
   }
