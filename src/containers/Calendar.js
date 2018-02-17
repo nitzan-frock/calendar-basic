@@ -130,6 +130,10 @@ class Calendar extends Component {
         currentDate = this.clickedPrevMonth(currentDate);
         return {currentDate: currentDate};
       }
+      else {
+        currentDate = this.clickedNextMonth(currentDate);
+        return {currentDate: currentDate};
+      }
     });
   }
 
@@ -144,6 +148,22 @@ class Calendar extends Component {
     else {
       currentDate.month = currentDate.month-1;
       console.log("   prev month: "+currentDate.month);
+      currentDate.day = null;
+      return currentDate;
+    }
+  }
+
+  clickedNextMonth = (currentDate) => {
+    console.log("   current month: "+currentDate.month);
+    if (currentDate.month === 11) { // if the current month is Dec, add to year and set month to jan.
+      currentDate.year = +currentDate.year+1;
+      currentDate.month = 0;
+      currentDate.day = null;
+      return currentDate;
+    }
+    else {
+      currentDate.month = +currentDate.month+1;
+      console.log("   next month: "+currentDate.month);
       currentDate.day = null;
       return currentDate;
     }
