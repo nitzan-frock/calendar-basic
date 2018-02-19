@@ -1,28 +1,21 @@
 import React from 'react';
 import Day from '../Days/Day/Day';
-import classes from './Days.css';
 
-const Days = (props) => {
+const days = (props) => {
     let allDays = [];
     let prev = props.days.prev.map((day, index) => {
         return (
-            <div className={classes.Day}>
-                <Day day={day.day} key={day.key} />
-            </div>
+            <Day day={day.day} key={day.key} />
         );
     });
     let current = props.days.current.map(day => {
         return (
-            <div className={classes.Day}>
-                <Day day={day.day} key={day.key} />
-            </div>
+            <Day day={day.day} key={day.key} />
         );
     });
     let next = props.days.next.map(day => {
         return (
-            <div className={classes.Day}>
-                <Day day={day.day} key={day.key} />
-            </div>
+            <Day day={day.day} key={day.key} />
         );
     });
 
@@ -30,4 +23,4 @@ const Days = (props) => {
     return allDays;
 };
 
-export default Days;
+export default days;

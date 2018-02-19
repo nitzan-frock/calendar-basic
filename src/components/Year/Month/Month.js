@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Month = (props) => {
+const month = (props) => {
     return (
         <div>
             {props.month}
@@ -8,4 +8,4 @@ const Month = (props) => {
     );
 };
 
-export default Month;
+export default month;

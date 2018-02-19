@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+
 import classes from './Calendar.css';
+
+import Auxiliary from '../hoc/Auxiliary/Auxiliary';
 import Month from '../components/Year/Month/Month';
 import Year from '../components/Year/Year';
 import DayNames from '../components/Year/Month/Days/DayNames/DayNames';
 import Days from '../components/Year/Month/Days/Days';
 import MonthButtons from '../components/Year/Month/MonthButtons/MonthButtons';
+import Modal from '../components/UI/Modal/Modal';
+import Events from '../components/Events/Events';
 
 const moment = require('moment');
 
@@ -175,25 +180,30 @@ class Calendar extends Component {
       <Days days={this.getDays()} currentDate={this.state.currentDate} key="days"/>
     );
     return (
-      <div className={classes.Calendar}>
-        <div className={classes.MonthYear}>
-          <div className={classes.Month}>
-            <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+      <Auxiliary>
+        <div className={classes.Calendar}>
+          <Modal>
+            <Events date={this.state.currentDate}/>
+          </Modal>
+          <div className={classes.MonthYear}>
+            <div className={classes.Month}>
+              <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+            </div>
+            <div className={classes.Year}>
+              <Year year={this.state.currentDate.year}/>
+            </div>
+            <div className={classes.MonthButtons}>
+              <MonthButtons changeMonth={this.changeMonthHandler} />
+            </div>
           </div>
-          <div className={classes.Year}>
-            <Year year={this.state.currentDate.year}/>
+          <div className={classes.DayNames}>
+            <DayNames names={DAY_NAMES} />
           </div>
-          <div className={classes.MonthButtons}>
-            <MonthButtons changeMonth={this.changeMonthHandler} />
+          <div className={classes.Days}>
+            {days}
           </div>
         </div>
-        <div className={classes.DayNames}>
-          <DayNames names={DAY_NAMES} />
-        </div>
-        <div className={classes.Days}>
-          {days}
-        </div>
-      </div>
+      </Auxiliary>
     );
   }
 }
