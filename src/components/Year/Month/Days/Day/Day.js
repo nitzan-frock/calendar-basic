@@ -4,7 +4,9 @@ import classes from './Day.css';
 const Day = (props) => {
     return (
         <div className={classes.Day}>
-            <button>{props.day}</button>
+            <button 
+                onClick={() => {props.showEvent(props.date)}}
+                 >{props.date.day}</button>
         </div>
     );
 };

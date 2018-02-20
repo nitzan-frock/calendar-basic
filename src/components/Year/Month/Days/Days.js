@@ -2,25 +2,20 @@ import React from 'react';
 import Day from '../Days/Day/Day';
 
 const days = (props) => {
-    let allDays = [];
-    let prev = props.days.prev.map((day, index) => {
-        return (
-            <Day day={day.day} key={day.key} />
-        );
-    });
-    let current = props.days.current.map(day => {
-        return (
-            <Day day={day.day} key={day.key} />
-        );
-    });
-    let next = props.days.next.map(day => {
-        return (
-            <Day day={day.day} key={day.key} />
-        );
+    let consolidatedDays = Object.keys(props.days)
+    .map(dayType => {
+        return (props.days[dayType].map((day) => {
+            return (
+                <Day 
+                    showEvent={props.showEvent} 
+                    currentDate={props.currentDate}
+                    date={day} 
+                    key={day.key} />
+            );
+        }));
     });
 
-    allDays.push(prev, current, next);
-    return allDays;
+    return consolidatedDays;
 };
 
 export default days;

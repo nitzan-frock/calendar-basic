@@ -31,8 +31,28 @@ class Calendar extends Component {
       year: CURRENT_DATE().year,
       month: CURRENT_DATE().month-1,
       day: CURRENT_DATE().day
-    }
+    },
+    showingEvent: false,
+    eventDate: {
+      year: CURRENT_DATE().year,
+      month: CURRENT_DATE().month-1,
+      day: CURRENT_DATE().day
+    },
+    events: []
   };
+
+  showEventHandler = (eventDate) => {
+    console.log("in showEventHandler");
+    console.log(eventDate);
+    this.setState({
+      showingEvent: true,
+      eventDate: {
+        year: eventDate.year,
+        month: eventDate.month,
+        day: eventDate.day
+      }
+    });
+  }
 
   getDays = () => {
     console.log("IN getDays");
@@ -49,7 +69,7 @@ class Calendar extends Component {
     const firstDayOfMonth = firstOfMonth.day();
     const current = {
       year: currentDate.year,
-      month: "0"+(currentDate.month),
+      month: currentDate.month,
       firstOfMonth: "01",
       day: firstDayOfMonth
     };
@@ -59,7 +79,7 @@ class Calendar extends Component {
       let prevMonth = +current.month - 1;
       //console.log(current.day);
       daysOfPrevMonth = current.day - current.firstOfMonth;
-      if (+current.month === 0) { // if current month is January
+      if (current.month === 0) { // if current month is January
         let prevYear = current.year - 1;
         days.prev = this.getRollingDays(
           days.prev, 
@@ -80,7 +100,7 @@ class Calendar extends Component {
         );
       }
     }
-    days.current = this.getCurrentDays(current.month, days.current, "current");
+    days.current = this.getCurrentDays(current.year, current.month, days.current, "current");
     let remainingDays = 42 - (days.current.length + days.prev.length);
     days.next = this.getRollingDays(
       days.next, 
@@ -100,6 +120,8 @@ class Calendar extends Component {
       for (let i = 0; i <= daysOfRollingMonth; i++) { 
         days.push({
           day: rollingDays++,
+          month: month,
+          year: year,
           key: key+i,
         });
       }
@@ -109,6 +131,8 @@ class Calendar extends Component {
       for (let i = 1; i <= daysOfRollingMonth; i++) {
         days.push({
           day: i,
+          month: month,
+          year: year,
           key: key+i
         });
       }
@@ -116,11 +140,13 @@ class Calendar extends Component {
     }
   }
 
-  getCurrentDays = (month, days, key) => {
+  getCurrentDays = (year, month, days, key) => {
     let daysInMonth = moment().month(month).daysInMonth();
     for (let i = 1; i <= daysInMonth; i++) {
       days.push({
         day: i,
+        month: month,
+        year: year,
         key: key+i
       });
     }
@@ -177,13 +203,19 @@ class Calendar extends Component {
   render() {
     console.log("render");
     let days = (
-      <Days days={this.getDays()} currentDate={this.state.currentDate} key="days"/>
+      <Days 
+        showEvent={this.showEventHandler}
+        days={this.getDays()} 
+        currentDate={this.state.currentDate} 
+        key="days"/>
     );
+
     return (
       <Auxiliary>
         <div className={classes.Calendar}>
-          <Modal>
-            <Events date={this.state.currentDate}/>
+          <Modal show={this.state.showingEvent}>
+            <Events 
+              date={this.state.eventDate}/>
           </Modal>
           <div className={classes.MonthYear}>
             <div className={classes.Month}>
