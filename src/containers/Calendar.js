@@ -92,8 +92,7 @@ class Calendar extends Component {
           prevMonth, 
           "prev"
         );
-      }
-      else {
+      } else {
         console.log("prevMonth: "+prevMonth);
         days.prev = this.getRollingDays(
           days.prev, 
@@ -130,8 +129,7 @@ class Calendar extends Component {
         });
       }
       return days;
-    }
-    else { // get rolling dates for next month
+    } else { // get rolling dates for next month
       for (let i = 1; i <= daysOfRollingMonth; i++) {
         days.push({
           day: i,
@@ -254,7 +252,11 @@ class Calendar extends Component {
           events: [{key: eventKey, event: eventDescription}]
         });
       }
-      return {events: newEvents};
+      console.log(newEvents);
+      return ({
+        events: newEvents,
+        eventKey: eventKey,
+      });
     });
   }
 

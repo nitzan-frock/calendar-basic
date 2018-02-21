@@ -11,9 +11,7 @@ const events = (props) => {
     const compiledDate = month+"-"+date+"-"+year;
     const weekDayName = moment(compiledDate, "MMMM-DD-YYYY").format('dddd');
 
-    
     let eventDate = (+moment().month(props.date.month).format('MM'))+"-"+date+"-"+year;
-
 
     let displayEvents = <p>No Events.</p>
 
@@ -23,7 +21,6 @@ const events = (props) => {
 
             if (existingEventDate === eventDate) {
                 displayEvents = date.events.map(event => {
-                    console.log("event: " + event.event);
                     return (<p key={event.key}>- {event.event}</p>);
                 });
                 return displayEvents
