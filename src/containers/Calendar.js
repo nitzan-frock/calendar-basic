@@ -36,23 +36,27 @@ class Calendar extends Component {
     eventDate: {
       year: CURRENT_DATE().year,
       month: CURRENT_DATE().month-1,
-      day: CURRENT_DATE().day
+      day: CURRENT_DATE().day,
+      compiled: null
     },
-    events: []
-  };
-
-  showEventHandler = (eventDate) => {
-    console.log("in showEventHandler");
-    console.log(eventDate);
-    this.setState({
-      showingEvent: true,
-      eventDate: {
-        year: eventDate.year,
-        month: eventDate.month,
-        day: eventDate.day
+    eventKey: 0,
+    newEvent: "new event",
+    allEvents: [
+      {
+        date: "2-21-2018",
+        events: [
+          {key: 23, event: "it is wednesday my dudes"}
+        ]
+      },
+      {
+        date: "2-22-2018",
+        events: [
+          {key: 25, event: "blah blah"}, 
+          {key: 26, event: "herp" }
+        ]
       }
-    });
-  }
+    ]
+  };
 
   getDays = () => {
     console.log("IN getDays");
@@ -200,6 +204,69 @@ class Calendar extends Component {
     }
   }
 
+  showEventHandler = (eventDate) => {
+    console.log("in showEventHandler");
+    console.log(eventDate);
+    const compiled = (eventDate.month+1)+"-"+eventDate.day+"-"+eventDate.year;
+    console.log("compiled: "+ compiled);
+    this.setState({
+      showingEvent: true,
+      eventDate: {
+        year: eventDate.year,
+        month: eventDate.month,
+        day: eventDate.day,
+        compiled: compiled
+      }
+    });
+  }
+
+  eventChangedHandler = (event) => {
+    console.log("event description: " + event.target.value);
+    this.setState({
+      newEvent: event.target.value
+    })
+  }
+
+  addEventHandler = () => {
+    console.log("event:");
+    console.log(this.state.newEvent);
+    
+    this.setState((prevState) => {
+      let eventDate = prevState.eventDate.compiled;
+      let eventDescription = prevState.newEvent;
+      let newEvents = [...prevState.allEvents];
+      let eventKey = prevState.eventKey;
+      console.log("in state event date: " + eventDate);
+      console.log("new Events " );
+      console.log(newEvents);
+
+      let dateIndex = this.getEventDateIndex(newEvents);
+      console.log("date index: " + dateIndex);
+      eventKey++;
+      if (dateIndex !== null) {
+        console.log(newEvents[dateIndex].date);
+        newEvents[dateIndex].events.push({
+          key: eventKey, event: eventDescription
+        });
+      } else {
+        newEvents.push({
+          date: eventDate,
+          events: [{key: eventKey, event: eventDescription}]
+        });
+      }
+      return {events: newEvents};
+    });
+  }
+
+  getEventDateIndex = (events) => {
+    for (let i = 0, l = events.length; i < l; i++) {
+      if (events[i].date === this.state.eventDate.compiled) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   render() {
     console.log("render");
     let days = (
@@ -215,7 +282,21 @@ class Calendar extends Component {
         <div className={classes.Calendar}>
           <Modal show={this.state.showingEvent}>
             <Events 
-              date={this.state.eventDate}/>
+              date={this.state.eventDate}
+              addEvent={this.addEventHandler} 
+              newEvent={this.state.newEvent}
+              events={this.state.allEvents} >
+                <form >
+                  <label>
+                      Event: 
+                      <input 
+                        type="text" 
+                        value={this.state.newEvent}
+                        onChange={event => this.eventChangedHandler(event)} />
+                  </label>
+                  <button onClick={this.addEventHandler} >Add Event</button>
+                </form>
+            </Events>
           </Modal>
           <div className={classes.MonthYear}>
             <div className={classes.Month}>
