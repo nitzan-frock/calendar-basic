@@ -10,6 +10,7 @@ import Days from '../components/Year/Month/Days/Days';
 import MonthButtons from '../components/Year/Month/MonthButtons/MonthButtons';
 import Modal from '../components/UI/Modal/Modal';
 import Events from '../components/Events/Events';
+import EventForm from '../components/UI/EventForm/EventForm';
 
 const moment = require('moment');
 
@@ -40,26 +41,11 @@ class Calendar extends Component {
       compiled: null
     },
     eventKey: 0,
-    newEvent: "new event",
-    allEvents: [
-      {
-        date: "2-21-2018",
-        events: [
-          {key: 23, event: "it is wednesday my dudes"}
-        ]
-      },
-      {
-        date: "2-22-2018",
-        events: [
-          {key: 25, event: "blah blah"}, 
-          {key: 26, event: "herp" }
-        ]
-      }
-    ]
+    newEvent: "",
+    allEvents: []
   };
 
   getDays = () => {
-    console.log("IN getDays");
     let days = {
       prev: [],
       current: [],
@@ -81,7 +67,7 @@ class Calendar extends Component {
 
     if (current.day !== 0){ // current Month's first day is not a sunday
       let prevMonth = +current.month - 1;
-      //console.log(current.day);
+
       daysOfPrevMonth = current.day - current.firstOfMonth;
       if (current.month === 0) { // if current month is January
         let prevYear = current.year - 1;
@@ -93,7 +79,7 @@ class Calendar extends Component {
           "prev"
         );
       } else {
-        console.log("prevMonth: "+prevMonth);
+
         days.prev = this.getRollingDays(
           days.prev, 
           daysOfPrevMonth, 
@@ -156,7 +142,6 @@ class Calendar extends Component {
   }
 
   changeMonthHandler = (buttonType) => {
-    console.log("change month handler");
     this.setState((prevState) => {
       let currentDate = {...prevState.currentDate};
       if (buttonType === 'up') {
@@ -171,7 +156,6 @@ class Calendar extends Component {
   }
 
   clickedPrevMonth = (currentDate) => {
-    console.log("   current month: "+currentDate.month);
     if (currentDate.month === 0) { // if the current month is Jan, subtract a year and set the month to Dec.
       currentDate.year = currentDate.year-1;
       currentDate.month = 11;
@@ -180,14 +164,12 @@ class Calendar extends Component {
     }
     else {
       currentDate.month = currentDate.month-1;
-      console.log("   prev month: "+currentDate.month);
       currentDate.day = null;
       return currentDate;
     }
   }
 
   clickedNextMonth = (currentDate) => {
-    console.log("   current month: "+currentDate.month);
     if (currentDate.month === 11) { // if the current month is Dec, add to year and set month to jan.
       currentDate.year = +currentDate.year+1;
       currentDate.month = 0;
@@ -196,17 +178,13 @@ class Calendar extends Component {
     }
     else {
       currentDate.month = +currentDate.month+1;
-      console.log("   next month: "+currentDate.month);
       currentDate.day = null;
       return currentDate;
     }
   }
 
   showEventHandler = (eventDate) => {
-    console.log("in showEventHandler");
-    console.log(eventDate);
     const compiled = (eventDate.month+1)+"-"+eventDate.day+"-"+eventDate.year;
-    console.log("compiled: "+ compiled);
     this.setState({
       showingEvent: true,
       eventDate: {
@@ -219,30 +197,28 @@ class Calendar extends Component {
   }
 
   eventChangedHandler = (event) => {
-    console.log("event description: " + event.target.value);
     this.setState({
       newEvent: event.target.value
     })
   }
 
+  eventEnterPressedHandler = (event) => {
+    if (event.key === "Enter") {
+      this.addEventHandler();
+    }
+  }
+
   addEventHandler = () => {
-    console.log("event:");
-    console.log(this.state.newEvent);
-    
     this.setState((prevState) => {
       let eventDate = prevState.eventDate.compiled;
       let eventDescription = prevState.newEvent;
       let newEvents = [...prevState.allEvents];
       let eventKey = prevState.eventKey;
-      console.log("in state event date: " + eventDate);
-      console.log("new Events " );
-      console.log(newEvents);
-
       let dateIndex = this.getEventDateIndex(newEvents);
-      console.log("date index: " + dateIndex);
+
       eventKey++;
       if (dateIndex !== null) {
-        console.log(newEvents[dateIndex].date);
+
         newEvents[dateIndex].events.push({
           key: eventKey, event: eventDescription
         });
@@ -252,9 +228,9 @@ class Calendar extends Component {
           events: [{key: eventKey, event: eventDescription}]
         });
       }
-      console.log(newEvents);
       return ({
-        events: newEvents,
+        allEvents: newEvents,
+        newEvent: "",
         eventKey: eventKey,
       });
     });
@@ -269,8 +245,16 @@ class Calendar extends Component {
     return null;
   }
 
+  closeModalHandler = () => {
+    this.setState((prevState) => {
+      return {
+        newEvent: "",
+        showingEvent: !prevState.showingEvent
+      }
+    });
+  }
+
   render() {
-    console.log("render");
     let days = (
       <Days 
         showEvent={this.showEventHandler}
@@ -282,22 +266,17 @@ class Calendar extends Component {
     return (
       <Auxiliary>
         <div className={classes.Calendar}>
-          <Modal show={this.state.showingEvent}>
+          <Modal show={this.state.showingEvent} closedModal={this.closeModalHandler}>
             <Events 
               date={this.state.eventDate}
               addEvent={this.addEventHandler} 
               newEvent={this.state.newEvent}
               events={this.state.allEvents} >
-                <form >
-                  <label>
-                      Event: 
-                      <input 
-                        type="text" 
-                        value={this.state.newEvent}
-                        onChange={event => this.eventChangedHandler(event)} />
-                  </label>
-                  <button onClick={this.addEventHandler} >Add Event</button>
-                </form>
+                <EventForm 
+                  eventChanged={this.eventChangedHandler}
+                  eventAdded={this.addEventHandler}
+                  enterPressed={this.eventEnterPressedHandler}
+                  value={this.state.newEvent} />     
             </Events>
           </Modal>
           <div className={classes.MonthYear}>
