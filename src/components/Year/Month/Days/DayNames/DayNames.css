@@ -1,0 +1,6 @@
+.name{
+    display: flex;
+    border: 1px solid black;
+    width: 25px;
+    justify-content: center;
+}
