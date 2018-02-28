@@ -1,6 +1,6 @@
 .Calendar {
   display: grid;
-  max-width: 800px;
+  max-width: 600px;
   width: 100%;
   grid-template-rows: auto 1fr;
   outline: 1px solid black;
@@ -28,10 +28,16 @@
 .MonthYear {
   display: flex;
   font-size: 17pt;
-  width: 90%;
-  margin: 0 10px 0 10px;
+  width: 100%;
+  margin-left: 20px;
   justify-content: left;
   align-content: center;
+}
+
+@media (min-width: 600px) {
+  .MonthYear {
+    margin-left: 40px;
+  }
 }
 
 .Month {
