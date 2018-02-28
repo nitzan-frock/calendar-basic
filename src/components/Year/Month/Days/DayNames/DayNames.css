@@ -1,6 +1,10 @@
-.name{
+.name {
     display: flex;
-    border: 1px solid black;
-    width: 25px;
+    width: 32px;
     justify-content: center;
+    align-content: center;
+}
+
+.name h3 {
+    border: 1px solid red;
 }
