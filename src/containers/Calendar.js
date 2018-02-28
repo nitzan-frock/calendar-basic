@@ -279,19 +279,21 @@ class Calendar extends Component {
                   value={this.state.newEvent} />     
             </Events>
           </Modal>
-          <div className={classes.MonthYear}>
-            <div className={classes.Month}>
-              <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+          <div className={classes.Header}>
+            <div className={classes.MonthYear}>
+              <div className={classes.Month}>
+                <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+              </div>
+              <div className={classes.Year}>
+                <Year year={this.state.currentDate.year}/>
+              </div>
+              <div className={classes.MonthButtons}>
+                <MonthButtons changeMonth={this.changeMonthHandler} />
+              </div>
             </div>
-            <div className={classes.Year}>
-              <Year year={this.state.currentDate.year}/>
+            <div className={classes.DayNames}>
+              <DayNames names={DAY_NAMES} />
             </div>
-            <div className={classes.MonthButtons}>
-              <MonthButtons changeMonth={this.changeMonthHandler} />
-            </div>
-          </div>
-          <div className={classes.DayNames}>
-            <DayNames names={DAY_NAMES} />
           </div>
           <div className={classes.Days}>
             {days}

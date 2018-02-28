@@ -3,7 +3,7 @@ import React from 'react';
 const month = (props) => {
     return (
         <div>
-            {props.month}
+            <strong>{props.month}</strong>
         </div>
     );
 };

@@ -1,12 +1,20 @@
-.Day button {
+.Day {
     display: flex;
+    height: 100%;
+    max-width: 50px;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+}
+
+.Day p {
     border: none;
-    margin: 5px;
     background-color: none;
-    color: darkslategrey;
+    color: rgb(36, 36, 36);
     text-decoration: none;
 }
 
-button:hover {
-    border: 2px solid #008CBA;
+.Day:hover {
+    border: 3px solid #008CBA;
 }

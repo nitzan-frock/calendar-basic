@@ -3,10 +3,8 @@ import classes from './Day.css';
 
 const Day = (props) => {
     return (
-        <div className={classes.Day}>
-            <button 
-                onClick={() => {props.showEvent(props.date)}}
-                 >{props.date.day}</button>
+        <div className={classes.Day} onClick={() => {props.showEvent(props.date)}}>
+            <p>{props.date.day}</p>
         </div>
     );
 };
