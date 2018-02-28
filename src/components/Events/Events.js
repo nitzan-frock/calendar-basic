@@ -1,18 +1,15 @@
 import React from 'react';
 
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
+import getToday from '../Year/Month/Days/Day/Today/getToday';
 
 const moment = require('moment');
 
 const events = (props) => {
     // define date clicked for the event
-    const year = props.date.year;
-    const month = moment().month(props.date.month).format('MMMM');
-    const date = props.date.day;
-    const compiledDate = month+"-"+date+"-"+year;
-    const weekDayName = moment(compiledDate, "MMMM-DD-YYYY").format('dddd');
+    const dateObj = getToday(props.date);
 
-    let eventDate = (+moment().month(props.date.month).format('MM'))+"-"+date+"-"+year;
+    let eventDate = (+moment().month(dateObj.month).format('MM'))+"-"+dateObj.day+"-"+dateObj.year;
 
     let displayEvents = <p>No Events.</p>
 
@@ -33,7 +30,7 @@ const events = (props) => {
     return (
         <Auxiliary>
             <h2>Events</h2>
-            <h3>{weekDayName}, {month} {date}, {year}</h3> 
+            <h3>{dateObj.compiledString}</h3> 
             {displayEvents}
             {props.children}
         </Auxiliary>

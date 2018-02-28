@@ -11,6 +11,7 @@ import MonthButtons from '../components/Year/Month/MonthButtons/MonthButtons';
 import Modal from '../components/UI/Modal/Modal';
 import Events from '../components/Events/Events';
 import EventForm from '../components/UI/EventForm/EventForm';
+import Today from '../components/Year/Month/Days/Day/Today/Today';
 
 const moment = require('moment');
 
@@ -28,6 +29,11 @@ const CURRENT_DATE = () => {
 
 class Calendar extends Component {
   state = {
+    actualCurrentDate: {
+      year: CURRENT_DATE().year,
+      month: CURRENT_DATE().month-1,
+      day: CURRENT_DATE().day
+    },
     currentDate: {
       year: CURRENT_DATE().year,
       month: CURRENT_DATE().month-1,
@@ -254,12 +260,19 @@ class Calendar extends Component {
     });
   }
 
+  todayDateClickedHandler = () => {
+    this.setState((prevState) => {
+      return {currentDate: prevState.actualCurrentDate}
+    });
+  }
+
   render() {
     let days = (
       <Days 
         showEvent={this.showEventHandler}
         days={this.getDays()} 
-        currentDate={this.state.currentDate} 
+        actualCurrentDate={this.state.actualCurrentDate} 
+        currentDate={this.state.currentDate}
         key="days"/>
     );
 
@@ -279,37 +292,30 @@ class Calendar extends Component {
                   value={this.state.newEvent} />     
             </Events>
           </Modal>
-<<<<<<< HEAD
-          <div className={classes.MonthYear}>
-            <div className={classes.Month}>
-              <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
-            </div>
-            <div className={classes.Year}>
-              <Year year={this.state.currentDate.year}/>
-            </div>
-            <div className={classes.MonthButtons}>
-              <MonthButtons changeMonth={this.changeMonthHandler} />
-            </div>
-          </div>
-          <div className={classes.DayNames}>
-            <DayNames names={DAY_NAMES} />
-=======
           <div className={classes.Header}>
-            <div className={classes.MonthYear}>
-              <div className={classes.Month}>
-                <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+            <div className={classes.Today}>
+              <Today 
+                clicked={this.todayDateClickedHandler}
+                date={this.state.actualCurrentDate} />
+            </div>
+            <div className={classes.MYBtns}>
+              <div className={classes.MonthYear}>
+                <div className={classes.Month}>
+                  <Month month={moment().month(this.state.currentDate.month).format('MMMM')} />
+                </div>
+                <div className={classes.Year}>
+                  <Year year={this.state.currentDate.year}/>
+                </div>
               </div>
-              <div className={classes.Year}>
-                <Year year={this.state.currentDate.year}/>
-              </div>
-              <div className={classes.MonthButtons}>
-                <MonthButtons changeMonth={this.changeMonthHandler} />
+              <div className={classes.MonthButtonsContainer}>
+                <div className={classes.MonthButtons}>
+                  <MonthButtons changeMonth={this.changeMonthHandler} />
+                </div>
               </div>
             </div>
             <div className={classes.DayNames}>
               <DayNames names={DAY_NAMES} />
             </div>
->>>>>>> refs/remotes/origin/master
           </div>
           <div className={classes.Days}>
             {days}

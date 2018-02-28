@@ -17,14 +17,34 @@
   justify-content: center;
 }
 
+.MYBtns {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .MonthYear {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  align-content: center;
-  justify-items: center;
+  display: flex;
   font-size: 17pt;
-  width: 65%;
-  margin: 5px 30px;
+  width: 90%;
+  margin: 0 10px 0 10px;
+  justify-content: left;
+  align-content: center;
+}
+
+.Month {
+  margin-right: 8px;
+}
+
+.MonthButtonsContainer {
+  display: inline-block;
+  padding: 0 10px;
+}
+
+.MonthButtons {
+  display: block;
 }
 
 .DayNames {
@@ -45,17 +65,4 @@
   grid-template-rows: repeat(6, 50px);
   align-items: center;
   justify-items: center;
-}
-
-.Month {
-  display: block;
-}
-
-.Year {
-  display: block;
-  padding: 0 10px;
-}
-
-.MonthButtons {
-  display: block;
 }

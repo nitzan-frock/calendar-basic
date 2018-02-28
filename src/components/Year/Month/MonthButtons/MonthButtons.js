@@ -1,10 +1,11 @@
 import React from 'react';
+import classes from './MonthButtons.css';
 
 const monthButtons = (props) => {
     return (
-        <div>
-            <button onClick={() => props.changeMonth('up')}>up</button>
-            <button onClick={() => props.changeMonth('down')}>down</button>
+        <div className={classes.Container}>
+            <div className={classes.Up} onClick={() => props.changeMonth('up')} ></div>
+            <div className={classes.Down} onClick={() => props.changeMonth('down')}></div>
         </div>
     );
 };

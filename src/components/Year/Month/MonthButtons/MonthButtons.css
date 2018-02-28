@@ -1,0 +1,28 @@
+.Container {
+    display: flex;
+    flex-flow: row;
+    align-content: center;
+}
+
+.Up {
+    border-bottom: 20px solid gray;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    width: 0;
+    height: 0;
+}
+
+.Down {
+    border-top: 20px solid gray;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    width: 0;
+    height: 0;
+}
+
+.Up:hover,
+.Down:hover {
+    border-top-color: rgb(172, 172, 172);
+    border-bottom-color: rgb(172, 172, 172);
+    cursor: pointer;
+}

@@ -3,13 +3,15 @@ import Day from '../Days/Day/Day';
 
 const days = (props) => {
     let consolidatedDays = Object.keys(props.days)
-    .map(dayType => {
-        return (props.days[dayType].map((day) => {
+    .map(monthType => {
+        return (props.days[monthType].map((day) => {
             return (
                 <Day 
                     showEvent={props.showEvent} 
+                    actualCurrentDate={props.actualCurrentDate}
                     currentDate={props.currentDate}
                     date={day} 
+                    month={monthType}
                     key={day.key} />
             );
         }));
