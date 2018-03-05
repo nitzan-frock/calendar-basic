@@ -40,9 +40,15 @@ class Calendar extends Component {
       day: CURRENT_DATE().day
     },
     showingEvent: false,
+    eventDate: {
+      year: CURRENT_DATE().year,
+      month: CURRENT_DATE().month - 1,
+      day: CURRENT_DATE().day,
+      compiled: null
+    }
   };
 
-  getDays = () => {
+  initDays = () => {
     let days = {
       prev: [],
       current: [],
@@ -213,7 +219,7 @@ class Calendar extends Component {
     let days = (
       <Days 
         showEvent={this.showEventHandler}
-        days={this.getDays()} 
+        days={this.initDays()} 
         actualCurrentDate={this.state.actualCurrentDate} 
         currentDate={this.state.currentDate}
         key="days"/>

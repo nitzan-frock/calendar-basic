@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import getToday from '../Year/Month/Days/Day/Today/getToday';
+import EventForm from '../../components/UI/EventForm/EventForm';
 
 const moment = require('moment');
 
@@ -102,7 +103,11 @@ class Events extends Component {
                 <h2>Events</h2>
                 <h3>{dateObj.compiledString}</h3>
                 {displayEvents}
-                {props.children}
+                <EventForm 
+                    eventChanged={this.eventChangedHandler}
+                    eventAdded={this.addEventHandler}
+                    enterPressed={this.eventEnterPressedHandler}
+                    value={this.state.newEvent}/>
             </Auxiliary>
         );
     }
