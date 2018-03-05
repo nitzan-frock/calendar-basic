@@ -40,15 +40,6 @@ class Calendar extends Component {
       day: CURRENT_DATE().day
     },
     showingEvent: false,
-    eventDate: {
-      year: CURRENT_DATE().year,
-      month: CURRENT_DATE().month-1,
-      day: CURRENT_DATE().day,
-      compiled: null
-    },
-    eventKey: 0,
-    newEvent: "",
-    allEvents: []
   };
 
   getDays = () => {
@@ -109,9 +100,10 @@ class Calendar extends Component {
 
   getRollingDays = (days, daysOfRollingMonth, year, month, key) => {
     let daysInMonth = moment().month(month).daysInMonth();
+
+    // get rolling dates from previous month
     if (key === "prev") {
       let rollingDays = daysInMonth - daysOfRollingMonth;
-      // get rolling dates from previous month
       for (let i = 0; i <= daysOfRollingMonth; i++) { 
         days.push({
           day: rollingDays++,
@@ -200,55 +192,6 @@ class Calendar extends Component {
         compiled: compiled
       }
     });
-  }
-
-  eventChangedHandler = (event) => {
-    this.setState({
-      newEvent: event.target.value
-    })
-  }
-
-  eventEnterPressedHandler = (event) => {
-    if (event.key === "Enter") {
-      this.addEventHandler();
-    }
-  }
-
-  addEventHandler = () => {
-    this.setState((prevState) => {
-      let eventDate = prevState.eventDate.compiled;
-      let eventDescription = prevState.newEvent;
-      let newEvents = [...prevState.allEvents];
-      let eventKey = prevState.eventKey;
-      let dateIndex = this.getEventDateIndex(newEvents);
-
-      eventKey++;
-      if (dateIndex !== null) {
-
-        newEvents[dateIndex].events.push({
-          key: eventKey, event: eventDescription
-        });
-      } else {
-        newEvents.push({
-          date: eventDate,
-          events: [{key: eventKey, event: eventDescription}]
-        });
-      }
-      return ({
-        allEvents: newEvents,
-        newEvent: "",
-        eventKey: eventKey,
-      });
-    });
-  }
-
-  getEventDateIndex = (events) => {
-    for (let i = 0, l = events.length; i < l; i++) {
-      if (events[i].date === this.state.eventDate.compiled) {
-        return i;
-      }
-    }
-    return null;
   }
 
   closeModalHandler = () => {
