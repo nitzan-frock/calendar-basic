@@ -2,16 +2,15 @@ import React, { Component } from 'react';
 
 import classes from './Calendar.css';
 
-import Auxiliary from '../hoc/Auxiliary/Auxiliary';
-import Month from '../components/Year/Month/Month';
-import Year from '../components/Year/Year';
-import DayNames from '../components/Year/Month/Days/DayNames/DayNames';
-import Days from '../components/Year/Month/Days/Days';
-import MonthButtons from '../components/Year/Month/MonthButtons/MonthButtons';
-import Modal from '../components/UI/Modal/Modal';
-import Events from '../components/Events/Events';
-import EventForm from '../components/UI/EventForm/EventForm';
-import Today from '../components/Year/Month/Days/Day/Today/Today';
+import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
+import Month from '../../components/Year/Month/Month';
+import Year from '../../components/Year/Year';
+import DayNames from '../../components/Year/Month/Days/DayNames/DayNames';
+import Days from '../../components/Year/Month/Days/Days';
+import MonthButtons from '../../components/Year/Month/MonthButtons/MonthButtons';
+import Today from '../../components/Year/Month/Days/Day/Today/Today';
+import Modal from '../../components/UI/Modal/Modal';
+import Events from '../Events/Events';
 
 const moment = require('moment');
 
@@ -203,7 +202,6 @@ class Calendar extends Component {
   closeModalHandler = () => {
     this.setState((prevState) => {
       return {
-        newEvent: "",
         showingEvent: !prevState.showingEvent
       }
     });
@@ -230,16 +228,8 @@ class Calendar extends Component {
         <div className={classes.Calendar}>
           <Modal show={this.state.showingEvent} closedModal={this.closeModalHandler}>
             <Events 
-              eventDate={this.state.eventDate}
-              addEvent={this.addEventHandler} 
-              newEvent={this.state.newEvent}
-              events={this.state.allEvents} >
-                <EventForm 
-                  eventChanged={this.eventChangedHandler}
-                  eventAdded={this.addEventHandler}
-                  enterPressed={this.eventEnterPressedHandler}
-                  value={this.state.newEvent} />     
-            </Events>
+              showEvents={this.state.showingEvent}
+              eventDate={this.state.eventDate} />
           </Modal>
           <div className={classes.Header}>
             <div className={classes.Today}>

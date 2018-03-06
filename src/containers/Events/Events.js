@@ -1,65 +1,63 @@
 import React, { Component } from 'react';
 
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
-import getToday from '../Year/Month/Days/Day/Today/getToday';
+import getToday from '../../components/Year/Month/Days/Day/Today/getToday';
 import EventForm from '../../components/UI/EventForm/EventForm';
 
 const moment = require('moment');
 
 class Events extends Component {
     state = {
-        eventDate: {
-            year: CURRENT_DATE().year,
-            month: CURRENT_DATE().month - 1,
-            day: CURRENT_DATE().day,
-            compiled: null
-        },
         eventKey: 0,
-        newEvent: "",
-        allEvents: []
+        description: "",
+        events: []
     };
 
-    showEventsHandler = (eventDate) => {
-        const compiled = (eventDate.month + 1) + "-" + eventDate.day + "-" + eventDate.year;
-        this.setState({
-            showingEvent: true,
-            eventDate: {
-                year: eventDate.year,
-                month: eventDate.month,
-                day: eventDate.day,
-                compiled: compiled
+    componentDidUpdate () {
+        console.log("[componentDidUpdate]");
+        if (!this.props.showEvents) {
+            if (this.state.description){
+                console.log("setting description to empty");
+                this.setState({description: "" });
             }
-        });
+        }
     }
 
     eventChangedHandler = (event) => {
         this.setState({
-            newEvent: event.target.value
+            description: event.target.value
         });
     }
 
+    eventEnterPressedHandler = (event) => {
+        if (event.key === "Enter") {
+          this.addEventHandler();
+        }
+    }
+
     addEventHandler = () => {
+        console.log("[addEventHandler]");
         this.setState((prevState) => {
-            let eventDate = prevState.eventDate.compiled;
-            let eventDescription = prevState.newEvent;
-            let newEvents = [...prevState.allEvents];
+            let eventDate = this.props.eventDate.compiled;
+            let description = prevState.description;
+            let events = [...prevState.events];
             let eventKey = prevState.eventKey;
-            let dateIndex = this.getEventDateIndex(newEvents);
+            let dateIndex = this.getEventDateIndex(events);
 
             eventKey++;
             if (dateIndex !== null) {
-
-                newEvents[dateIndex].events.push({
-                    key: eventKey, event: eventDescription
+                events[dateIndex].events.push({
+                    key: eventKey, event: description
                 });
             } else {
-                newEvents.push({
+                events.push({
                     date: eventDate,
-                    events: [{ key: eventKey, event: eventDescription }]
+                    events: [{ key: eventKey, event: description }]
                 });
             }
+
             return ({
-                allEvents: newEvents,
+                allEvents: events,
                 newEvent: "",
                 eventKey: eventKey,
             });
@@ -72,20 +70,21 @@ class Events extends Component {
                 return i;
             }
         }
+
         return null;
     }
 
     render() {
         // define date clicked for the event
-        const dateObj = getToday(props.date);
+        const dateObj = getToday(this.props.eventDate);
 
         // get event date in format of MM-DD-YYYY
         let eventDate = (+moment().month(dateObj.month).format('MM')) + "-" + dateObj.day + "-" + dateObj.year;
 
         let displayEvents = <p>No Events.</p>
 
-        if (props.events.length > 0) {
-            props.events.map(date => {
+        if (this.state.events.length > 0) {
+            this.state.events.map(date => {
                 const existingEventDate = date.date;
                 if (existingEventDate === eventDate) {
                     displayEvents = date.events.map(event => {
@@ -107,7 +106,7 @@ class Events extends Component {
                     eventChanged={this.eventChangedHandler}
                     eventAdded={this.addEventHandler}
                     enterPressed={this.eventEnterPressedHandler}
-                    value={this.state.newEvent}/>
+                    value={this.state.description}/>
             </Auxiliary>
         );
     }

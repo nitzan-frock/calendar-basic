@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Layout.css';
-import Calendar from './containers/Calendar';
+import Calendar from './containers/Calendar/Calendar';
 
 const Layout = () => {
     return (
