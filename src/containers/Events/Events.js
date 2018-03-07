@@ -13,8 +13,8 @@ class Events extends Component {
         events: []
     };
 
-    componentDidUpdate () {
-        console.log("[componentDidUpdate]");
+    componentWillUpdate () {
+        console.log("[componentWillUpdate]");
         if (!this.props.showEvents) {
             if (this.state.description){
                 this.setState({description: "" });
@@ -22,7 +22,7 @@ class Events extends Component {
             }
         }
 
-        const rootRef = firebase.database().ref().child('events');
+        const rootRef = firebase.database().ref('/users/'+this.props.user).child('events');
         const eventRef = rootRef.child('event');
         eventRef.on('value', snap => {
 

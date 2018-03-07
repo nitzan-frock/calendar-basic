@@ -5,11 +5,17 @@ import Calendar from './containers/Calendar/Calendar';
 import SignIn from './components/UI/SignIn/SignIn';
 import Logout from './components/UI/Logout/Logout';
 import Aux from './hoc/Auxiliary/Auxiliary';
+
+const INITIAL_STATE = {
+    userSignedIn: false,
+    user: null,
+    email: "",
+    pass: ""
+}
+
 class Layout extends Component {
     state = {
-        userSignedIn: false,
-        email: "",
-        pass: ""
+        ...INITIAL_STATE
     }
 
     emailChangedHandler = (e) => {
@@ -27,12 +33,21 @@ class Layout extends Component {
     }
 
     loginClickedHandler = () => {
+        // TODO: check for real email
         const email = this.state.email;
         const pass = this.state.pass;
         const auth = firebase.auth();
         // Sign in
         const promise = auth.signInWithEmailAndPassword(email, pass);
         promise.catch(e => console.log(e.message));
+
+        console.log(promise);
+
+        firebase.auth().onAuthStateChanged(firebaseUser => {
+            if (firebaseUser) {
+                this.setState({userSignedIn: true});
+            }
+        });
     }
 
     signupClickedHandler = () => {
@@ -43,10 +58,51 @@ class Layout extends Component {
         // Sign Up
         const promise = auth.createUserWithEmailAndPassword(email, pass);
         promise.catch(e => console.log(e.message));
+
+        this.userAuthListener();
     }
 
     logoutClickedHandler = () => {
         firebase.auth().signOut();
+        this.userAuthListener();
+        //this.setState({userSignedIn: false});
+        console.log("signed out.");
+    }
+
+    userAuthListener = () => {
+        firebase.auth().onAuthStateChanged(firebaseUser => {
+            if (firebaseUser) {
+                const userId = firebase.auth().currentUser.uid;
+                this.setState({
+                    userSignedIn: true,
+                    user: userId
+                });
+            } else {
+                this.setState({...INITIAL_STATE})
+            }
+        });
+    }
+
+    googleSignInHandler = () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(result => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const token = result.credential.accessToken;
+            console.log("token: " + token);
+            // The signed-in user info.
+            const user = result.user;
+            console.log("user: "+user);
+        }).catch(error => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            const credential = error.credential;
+        });
+
+        this.userAuthListener();
     }
 
     render() {
@@ -61,27 +117,20 @@ class Layout extends Component {
                 pass={this.state.pass}
                 enterPressed={this.enterPressedHandler}
                 signupClicked={this.signupClickedHandler}
+                googleClicked={this.googleSignInHandler}
                 loginClicked={this.loginClickedHandler}/>
         );
 
         let page = loginPage;
 
-        // Add a realtime listener
-        firebase.auth().onAuthStateChanged(firebaseUser => {
-            if (firebaseUser) {
-                console.log("show calendar");
-                this.setState({userSignedIn: true})
-                page = (
-                    <Aux>
-                        <Calendar />
-                        <Logout logoutClicked={this.logoutClickedHandler} />
-                    </Aux>
-                );
-            } else {
-                console.log("not logged in");
-                page = loginPage;
-            }
-        });
+        if (this.state.userSignedIn) {
+            page = (
+                <Aux>
+                    <Calendar />
+                    <Logout logoutClicked={this.logoutClickedHandler} user={this.state.user}/>
+                </Aux>
+            );
+        }
 
         return (
             <div className={classes.Wrapper}>

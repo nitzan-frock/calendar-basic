@@ -30,6 +30,12 @@ const SignIn = (props) => {
                     id="signUp">
                     Sign Up
                 </button>
+
+                <button
+                    className={classes.Google}
+                    onClick={props.googleClicked}>
+                    Sign in with Google
+                </button>
             </div>
         </div>
     );

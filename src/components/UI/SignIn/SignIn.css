@@ -4,6 +4,7 @@
     min-width: 250px;
     max-width: 100%;
     width: 60%;
+    margin: 30px 0;
     padding: 40px 50px;
     justify-content: center;
     align-content: center;
@@ -39,6 +40,15 @@
 
 .Signup {
     color: rgb(84, 175, 168);
+    background-color: rgb(240, 240, 240);
+}
+
+.Google {
+    width: 100%;
+    background-repeat: none;
+    background-size: contain;
+    color: rgb(114, 114, 114);
+    background-color: rgb(240, 240, 240);
 }
 
 .Container button:hover {
