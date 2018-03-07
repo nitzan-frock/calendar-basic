@@ -1,0 +1,53 @@
+.Container {
+    display: flex;
+    flex-flow: column;
+    min-width: 250px;
+    max-width: 100%;
+    width: 60%;
+    padding: 40px 50px;
+    justify-content: center;
+    align-content: center;
+    box-shadow: 2px 4px 6px gray;
+}
+
+.Container input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    font-size: 12pt;
+    border: none;
+    outline: none;
+}
+
+.Container button {
+    display: block;
+    width: 100%;
+    align-content: center;
+    justify-content: center;
+    padding: 10px 0;
+    margin: 10px 0;
+    font-size: 14pt;
+    border: 0;
+    outline: 0;
+    box-shadow: 1px 2px 3px gray;
+}
+
+.Login {
+    background-color:rgb(84, 175, 168);
+    color: white;
+}
+
+.Signup {
+    color: rgb(84, 175, 168);
+}
+
+.Container button:hover {
+    background-color: rgb(75, 156, 151);
+    color: white;
+    border: 0;
+    outline: 0;
+}
+
+.Container button:active {
+    box-shadow: none;
+}

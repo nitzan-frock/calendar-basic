@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import firebase from 'firebase';
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import getToday from '../../components/Year/Month/Days/Day/Today/getToday';
 import EventForm from '../../components/UI/EventForm/EventForm';
@@ -17,10 +17,16 @@ class Events extends Component {
         console.log("[componentDidUpdate]");
         if (!this.props.showEvents) {
             if (this.state.description){
-                console.log("setting description to empty");
                 this.setState({description: "" });
+                console.log(this.state.events);
             }
         }
+
+        const rootRef = firebase.database().ref().child('events');
+        const eventRef = rootRef.child('event');
+        eventRef.on('value', snap => {
+
+        });
     }
 
     eventChangedHandler = (event) => {
@@ -57,8 +63,8 @@ class Events extends Component {
             }
 
             return ({
-                allEvents: events,
-                newEvent: "",
+                events: events,
+                description: "",
                 eventKey: eventKey,
             });
         });
@@ -66,7 +72,8 @@ class Events extends Component {
 
     getEventDateIndex = (events) => {
         for (let i = 0, l = events.length; i < l; i++) {
-            if (events[i].date === this.state.eventDate.compiled) {
+
+            if (events[i].date === this.props.eventDate.compiled) {
                 return i;
             }
         }

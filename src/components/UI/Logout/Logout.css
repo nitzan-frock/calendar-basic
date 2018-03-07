@@ -1,0 +1,26 @@
+.Logout {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    align-content: center;
+    justify-content: center;
+    padding: 10px 10px;
+    margin: 10px 10px;
+    font-size: 12pt;
+    border: 0;
+    outline: 0;
+    color: rgb(84, 175, 168);
+    box-shadow: 1px 2px 3px gray;
+}
+
+.Logout:hover {
+    background-color: rgb(75, 156, 151);
+    color: white;
+    border: 0;
+    outline: 0;
+}
+
+.Logout:active {
+    box-shadow: none;
+}
