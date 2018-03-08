@@ -50,6 +50,8 @@ class Events extends Component {
 
     addEventHandler = () => {
         console.log("[addEventHandler]");
+        
+
         this.setState((prevState) => {
             let eventDate = this.props.eventDate.compiled;
             let description = prevState.description;

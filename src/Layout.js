@@ -5,6 +5,7 @@ import Calendar from './containers/Calendar/Calendar';
 import SignIn from './components/UI/SignIn/SignIn';
 import Logout from './components/UI/Logout/Logout';
 import Aux from './hoc/Auxiliary/Auxiliary';
+import Route from 'react-router-dom';
 
 const INITIAL_STATE = {
     userSignedIn: false,
@@ -69,6 +70,17 @@ class Layout extends Component {
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 const userId = firebase.auth().currentUser.uid;
+                const rootRef = firebase.database().ref();
+                const userRef = rootRef.child('users');
+                console.log("USER ID:");
+                console.log(userRef.child(userId));
+                if (userRef.child(userId)) {
+                    userRef.set({
+                        [userId]: {
+                            user: "overwritten",
+                        }
+                    });
+                }
                 console.log("userId: " + userId);
                 this.setState({
                     userSignedIn: true,
