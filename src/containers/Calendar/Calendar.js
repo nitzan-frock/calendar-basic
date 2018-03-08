@@ -228,6 +228,7 @@ class Calendar extends Component {
         <div className={classes.Calendar}>
           <Modal show={this.state.showingEvent} closedModal={this.closeModalHandler}>
             <Events 
+              userId={this.props.userId}
               showEvents={this.state.showingEvent}
               eventDate={this.state.eventDate} />
           </Modal>

@@ -8,7 +8,7 @@ import Aux from './hoc/Auxiliary/Auxiliary';
 
 const INITIAL_STATE = {
     userSignedIn: false,
-    user: null,
+    userId: null,
     email: "",
     pass: ""
 }
@@ -43,11 +43,7 @@ class Layout extends Component {
 
         console.log(promise);
 
-        firebase.auth().onAuthStateChanged(firebaseUser => {
-            if (firebaseUser) {
-                this.setState({userSignedIn: true});
-            }
-        });
+        this.userAuthListener();
     }
 
     signupClickedHandler = () => {
@@ -73,9 +69,10 @@ class Layout extends Component {
         firebase.auth().onAuthStateChanged(firebaseUser => {
             if (firebaseUser) {
                 const userId = firebase.auth().currentUser.uid;
+                console.log("userId: " + userId);
                 this.setState({
                     userSignedIn: true,
-                    user: userId
+                    userId: userId
                 });
             } else {
                 this.setState({...INITIAL_STATE})
@@ -126,8 +123,8 @@ class Layout extends Component {
         if (this.state.userSignedIn) {
             page = (
                 <Aux>
-                    <Calendar />
-                    <Logout logoutClicked={this.logoutClickedHandler} user={this.state.user}/>
+                    <Calendar userId={this.state.userId} />
+                    <Logout logoutClicked={this.logoutClickedHandler} />
                 </Aux>
             );
         }

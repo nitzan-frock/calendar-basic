@@ -22,7 +22,14 @@ class Events extends Component {
             }
         }
 
-        const rootRef = firebase.database().ref('/users/'+this.props.user).child('events');
+        console.log("user: " + this.props.userId);
+        const rootRef = firebase.database().ref('users');
+        console.log("rootRef:");
+        console.log(rootRef);
+        if (rootRef === null) {
+
+            rootRef.set(this.props.userId);
+        }
         const eventRef = rootRef.child('event');
         eventRef.on('value', snap => {
 
@@ -72,7 +79,6 @@ class Events extends Component {
 
     getEventDateIndex = (events) => {
         for (let i = 0, l = events.length; i < l; i++) {
-
             if (events[i].date === this.props.eventDate.compiled) {
                 return i;
             }
