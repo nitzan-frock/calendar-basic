@@ -114,6 +114,13 @@ class Layout extends Component {
         this.userAuthListener();
     }
 
+    skipLoginHandler = () => {
+        this.setState({
+            userSignedIn: true,
+            userId: "anon"
+        });
+    }
+
     render() {
         //auth.signInWithEmailAndPassword(email, pass);
         //auth.createUserWithEmailAndPassword(email, pass);
@@ -127,6 +134,7 @@ class Layout extends Component {
                 enterPressed={this.enterPressedHandler}
                 signupClicked={this.signupClickedHandler}
                 googleClicked={this.googleSignInHandler}
+                skipLogin={this.skipLoginHandler}
                 loginClicked={this.loginClickedHandler}/>
         );
 

@@ -1,10 +1,8 @@
 .Logout {
-    position: absolute;
-    right: 0;
-    top: 0;
     display: block;
     align-content: center;
     justify-content: center;
+    width: 80px;
     padding: 10px 10px;
     margin: 10px 10px;
     font-size: 12pt;

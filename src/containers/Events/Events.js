@@ -1,39 +1,51 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import classes from './Events.css';
 import Auxiliary from '../../hoc/Auxiliary/Auxiliary';
 import getToday from '../../components/Year/Month/Days/Day/Today/getToday';
 import EventForm from '../../components/UI/EventForm/EventForm';
+import Event from '../../components/Event/Event';
+import Cookies from 'universal-cookie';
 
 const moment = require('moment');
+const cookies = new Cookies();
 
 class Events extends Component {
     state = {
-        eventKey: 0,
         description: "",
-        events: []
+        events: [],
     };
+
+    componentWillMount () {
+        let events = [];
+        if (cookies.get('events')) {
+            events = cookies.get('events');
+        }
+        this.setState({
+            events: events
+        });
+    }
 
     componentWillUpdate () {
         console.log("[componentWillUpdate]");
         if (!this.props.showEvents) {
             if (this.state.description){
                 this.setState({description: "" });
-                console.log(this.state.events);
             }
         }
 
-        console.log("user: " + this.props.userId);
-        const rootRef = firebase.database().ref('users');
-        console.log("rootRef:");
-        console.log(rootRef);
-        if (rootRef === null) {
+        if (this.props.userId !== "anon") {
+            const rootRef = firebase.database().ref('users');
 
-            rootRef.set(this.props.userId);
+            if (rootRef === null) {
+                rootRef.set(this.props.userId);
+            }
+            const eventRef = rootRef.child('event');
+            eventRef.on('value', snap => {
+            });
+        } else {
+
         }
-        const eventRef = rootRef.child('event');
-        eventRef.on('value', snap => {
-
-        });
     }
 
     eventChangedHandler = (event) => {
@@ -50,16 +62,14 @@ class Events extends Component {
 
     addEventHandler = () => {
         console.log("[addEventHandler]");
-        
 
         this.setState((prevState) => {
             let eventDate = this.props.eventDate.compiled;
             let description = prevState.description;
             let events = [...prevState.events];
-            let eventKey = prevState.eventKey;
             let dateIndex = this.getEventDateIndex(events);
 
-            eventKey++;
+            let eventKey = Math.floor(Math.random()*100000);
             if (dateIndex !== null) {
                 events[dateIndex].events.push({
                     key: eventKey, event: description
@@ -71,10 +81,13 @@ class Events extends Component {
                 });
             }
 
+            if (this.props.userId === "anon") {
+                this.setCookie(events);
+            }
+
             return ({
                 events: events,
                 description: "",
-                eventKey: eventKey,
             });
         });
     }
@@ -89,8 +102,42 @@ class Events extends Component {
         return null;
     }
 
+    eventControlClickedHandler = (key) => {
+        this.setState(prevState => {
+            let events = [...prevState.events];
+            const eventDateIndex = this.getEventDateIndex(events)
+
+            events[eventDateIndex].events = this.deleteEvent(events[eventDateIndex].events, key);
+
+            if (this.props.userId === "anon") {
+                this.setCookie(events);
+            }
+
+            return {events: events}
+        });
+    }
+
+    deleteEvent = (dayEvents, key) => {
+        console.log("in delete event");
+        console.log("OG KEY: " + key);
+        for(let i = 0, l = dayEvents.length; i < l; i++) {
+            if (dayEvents[i].key === key) {
+                dayEvents.splice(i,1);
+                return dayEvents;
+            }
+        }
+    }
+
+    setCookie = (events) => {
+        let d = new Date();
+        let timeForday = 24*60*60*1000;
+        d.setTime(d.getTime()+timeForday);
+
+        cookies.set('events', events, { path: '/', expires: d });
+    }
+
     render() {
-        // define date clicked for the event
+        // define date clicked for the event Day, Month #, YYYY
         const dateObj = getToday(this.props.eventDate);
 
         // get event date in format of MM-DD-YYYY
@@ -99,11 +146,18 @@ class Events extends Component {
         let displayEvents = <p>No Events.</p>
 
         if (this.state.events.length > 0) {
+            // iterate for selected date's events
             this.state.events.map(date => {
                 const existingEventDate = date.date;
-                if (existingEventDate === eventDate) {
+                if (existingEventDate === eventDate && date.events.length > 0) {
                     displayEvents = date.events.map(event => {
-                        return (<p key={event.key}>- {event.event}</p>);
+                        return (
+                            <Event 
+                                event={event.event} 
+                                key={event.key} 
+                                controlKey={event.key}
+                                eventControlClicked={this.eventControlClickedHandler} />
+                        );
                     });
                     return displayEvents
                 } else {
@@ -116,7 +170,9 @@ class Events extends Component {
             <Auxiliary>
                 <h2>Events</h2>
                 <h3>{dateObj.compiledString}</h3>
-                {displayEvents}
+                <div className={classes.Events}>
+                    {displayEvents}
+                </div>
                 <EventForm 
                     eventChanged={this.eventChangedHandler}
                     eventAdded={this.addEventHandler}

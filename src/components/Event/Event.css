@@ -1,0 +1,12 @@
+.Container {
+    display: flex;
+    height: 22pt;
+    justify-content: center;
+    align-items: center;
+}
+
+.Event {
+    font-size: 13pt;
+    display: inline-block;
+    cursor: pointer;
+}

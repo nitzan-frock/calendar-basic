@@ -36,6 +36,7 @@ const SignIn = (props) => {
                     onClick={props.googleClicked}>
                     Sign in with Google
                 </button>
+                <div className={classes.Skip} onClick={props.skipLogin}>Skip login.</div>
             </div>
         </div>
     );
