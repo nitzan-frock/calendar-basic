@@ -168,7 +168,6 @@ class Events extends Component {
 
         return (
             <Auxiliary>
-                <h2>Events</h2>
                 <h3>{dateObj.compiledString}</h3>
                 <div className={classes.Events}>
                     {displayEvents}

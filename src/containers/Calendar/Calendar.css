@@ -3,7 +3,6 @@
   max-width: 600px;
   width: 100%;
   grid-template-rows: auto 1fr;
-  outline: 1px solid black;
   margin: 10px 10px;
 }
 

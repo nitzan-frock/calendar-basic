@@ -5,6 +5,14 @@
 }
 
 .Delete {
-    
+    display: inline-block;
+    margin: 0 7px;
+    height: 20px;
+    width: 20px;
     cursor: pointer;
+}
+
+.Delete img {
+    width: 100%;
+    height: auto;
 }
