@@ -2,11 +2,12 @@
 
 A simple calendar app that shows rolling dates from the previous and next month.
   - Click "up" to go to the previous month, and click "down" to go to the next month.
+  - Click on a date to bring up it's events and add new events.
+    - if you skipped sign in, then the events will be stored in a cookie for one day.
 
 See Demo here: https://nitzanf.github.io/calendar-basic/
 
 Future Enhancements:
   - Styling:
-    - Clean and polished interface, responsive design, proper display on multiple devices.
-  - Modal to add events for specific dates.
-  - Current date as a button to take the user back to today's date.
+    - Events Modal needs to be stylized.
+  - Save events to firebase database.
